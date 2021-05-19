@@ -16,4 +16,6 @@ public interface EquipmentService {
     List<EquipmentDto> getCrashedByVolume(int volume);
 
     List<EquipmentDto> getEquipmentByType(String type);
+
+    void updateContactDate(Long id);
 }

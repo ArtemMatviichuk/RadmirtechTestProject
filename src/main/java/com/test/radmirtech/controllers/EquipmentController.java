@@ -37,4 +37,10 @@ public class EquipmentController {
     public List<EquipmentDto> getEquipmentByType(@PathVariable String type){
         return equipmentService.getEquipmentByType(type);
     }
+
+    @PostMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateContact(@PathVariable Long id){
+        equipmentService.updateContactDate(id);
+    }
 }

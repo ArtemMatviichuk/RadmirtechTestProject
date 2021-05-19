@@ -1,6 +1,7 @@
 package com.test.radmirtech.services.implementations;
 
-import com.test.radmirtech.dao.domain.Equipment;
+import com.test.radmirtech.dao.domain.EquipmentDetails;
+import com.test.radmirtech.dao.repos.EquipmentDetailsRepository;
 import com.test.radmirtech.dao.repos.EquipmentRepository;
 import com.test.radmirtech.dto.equipment.EquipmentDto;
 import com.test.radmirtech.exceptions.ItemNotFoundException;
@@ -8,6 +9,7 @@ import com.test.radmirtech.services.mappers.EquipmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,9 @@ import java.util.stream.Collectors;
 public class EquipmentService implements com.test.radmirtech.services.interfaces.EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
+
+    @Autowired
+    private EquipmentDetailsRepository equipmentDetailsRepository;
 
     @Override
     public EquipmentDto getEquipment(long id) {
@@ -70,5 +75,16 @@ public class EquipmentService implements com.test.radmirtech.services.interfaces
                 .stream()
                 .map(EquipmentMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateContactDate(Long id) {
+        EquipmentDetails details = equipmentDetailsRepository.findByEquipmentId(id)
+                .orElseThrow(() -> new ItemNotFoundException("Equipment not found"));
+
+        details.setLastContactDate(LocalDateTime.now());
+        details.setHasError(false);
+
+        equipmentDetailsRepository.save(details);
     }
 }
